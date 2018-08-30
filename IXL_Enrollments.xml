@@ -1,0 +1,26 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+	<description>Enrollments Export for IXL</description>
+	<properties>
+		<!--Loading from external properties file-->
+		<include href="etl.properties"/>
+	</properties>
+	<connection id="POWERSCHOOLDB" driver="$driver1" url="$url1" user="$user1" password="$password1" classpath="$classpath1"/>
+	<connection id="IXL_Enrollments" driver="csv" url="$outputcsv18">
+		null_string=
+		eol=\r\n
+	</connection>
+        <script connection-id="IXL_Enrollments">
+			Section ID, Student ID
+		</script>
+	<query connection-id="POWERSCHOOLDB">
+      select unique sections.schoolid, sections.section_number, sections.course_number, students.student_number from cc
+        join sections on cc.SECTIONID = sections.id
+        join students on cc.STUDENTID = students.id
+        join terms on cc.TERMID = terms.ID
+        where terms.yearid = 28 and students.grade_level in (2,3,4,5,6,7,8);
+        <script connection-id="IXL_Enrollments">
+			$schoolid-$course_number-$section_number, $student_number
+		</script>
+	</query>
+</etl>

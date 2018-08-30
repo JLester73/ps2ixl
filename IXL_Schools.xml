@@ -1,0 +1,22 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+	<description>Schools Export for IXL</description>
+	<properties>
+		<!--Loading from external properties file-->
+		<include href="etl.properties"/>
+	</properties>
+	<connection id="POWERSCHOOLDB" driver="$driver1" url="$url1" user="$user1" password="$password1" classpath="$classpath1"/>
+	<connection id="IXL_Schools" driver="csv" url="$outputcsv14">
+		null_string=
+		eol=\r\n
+	</connection>
+	    <script connection-id="IXL_Schools">
+			School ID, School Name
+		</script>
+	<query connection-id="POWERSCHOOLDB">
+        select school_number, name from schools;
+        <script connection-id="IXL_Schools">
+			$school_number, $name
+		</script>
+	</query>
+</etl>

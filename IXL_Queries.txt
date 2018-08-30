@@ -1,0 +1,31 @@
+IXL Queries
+
+Schools.Csv:
+  select school_number, name from schools;
+  
+Teachers.Csv:
+  select SchoolID, TeacherNumber,Email_Addr,First_Name,Last_Name from Teachers where Status=1;
+  
+Students.Csv:
+  select s.SCHOOLID, s.STUDENT_NUMBER, s.LAST_NAME, s.FIRST_NAME, s.GRADE_LEVEL, psc.email from PSM_STudentcontact psc
+		  inner join psm_studentcontacttype psct on psc.studentcontacttypeid= psct.id and psct.name='Self'
+          inner join sync_studentmap ssm on psc.studentid = ssm.studentid
+          inner join students s on ssm.studentsdcid = s.dcid
+		  where s.enroll_status = 0 and s.grade_level in (2,3,4,5,6,7,8);'
+		  
+Sections.Csv:
+  select unique teachers.teachernumber, sections.schoolid, schools.abbreviation, sections.SECTION_NUMBER, sections.COURSE_NUMBER, courses.COURSE_NAME
+          from sections
+          join terms on sections.termid = terms.id
+		  join sectionteacher on sections.teacher = sectionteacher.TEACHERID
+		  join teachers on sectionteacher.TEACHERID = teachers.id
+		  join courses on SECTIONS.COURSE_NUMBER = courses.course_number
+		  join schools on sections.schoolid = schools.school_number
+		  where terms.yearid=28;
+		  
+Enrollments.Csv
+select unique sections.schoolid, sections.section_number, sections.course_number, students.student_number from cc
+          join sections on cc.SECTIONID = sections.id
+          join students on cc.STUDENTID = students.id
+          join terms on cc.TERMID = terms.ID
+          where terms.yearid = 28 and students.grade_level in (2,3,4,5,6,7,8);

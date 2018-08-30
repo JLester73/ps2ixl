@@ -1,0 +1,26 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+	<description>Students Export for IXL</description>
+	<properties>
+		<!--Loading from external properties file-->
+		<include href="etl.properties"/>
+	</properties>
+	<connection id="POWERSCHOOLDB" driver="$driver1" url="$url1" user="$user1" password="$password1" classpath="$classpath1"/>
+	<connection id="IXL_Students" driver="csv" url="$outputcsv15">
+		null_string=
+		eol=\r\n
+	</connection>
+	    <script connection-id="IXL_Students">
+			School ID, Student ID, Student Number, Last Name, First Name, Grade, Student E-mail, Username, Password
+		</script>
+	<query connection-id="POWERSCHOOLDB">
+        select s.SCHOOLID, s.STUDENT_NUMBER, s.LAST_NAME, s.FIRST_NAME, s.GRADE_LEVEL, psc.email from PSM_STudentcontact psc
+		  inner join psm_studentcontacttype psct on psc.studentcontacttypeid= psct.id and psct.name='Self'
+          inner join sync_studentmap ssm on psc.studentid = ssm.studentid
+          inner join students s on ssm.studentsdcid = s.dcid
+		  where s.enroll_status = 0 and s.grade_level in (2,3,4,5,6,7,8);
+        <script connection-id="IXL_Students">
+			$schoolid, $student_number, $student_number, $last_name, $first_name, $grade_level, $email,$email,""
+		</script>
+	</query>
+</etl>

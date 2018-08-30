@@ -1,0 +1,29 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+	<description>Sections Export for IXL</description>
+	<properties>
+		<!--Loading from external properties file-->
+		<include href="etl.properties"/>
+	</properties>
+	<connection id="POWERSCHOOLDB" driver="$driver1" url="$url1" user="$user1" password="$password1" classpath="$classpath1"/>
+	<connection id="IXL_Sections" driver="csv" url="$outputcsv17">
+		null_string=
+		eol=\r\n
+	</connection>
+        <script connection-id="IXL_Sections">
+			Teacher ID, Section ID, Name
+		</script>
+	<query connection-id="POWERSCHOOLDB">
+      select unique teachers.teachernumber, sections.schoolid, schools.abbreviation, sections.SECTION_NUMBER, sections.COURSE_NUMBER, courses.COURSE_NAME
+        from sections
+          join terms on sections.termid = terms.id
+		  join sectionteacher on sections.teacher = sectionteacher.TEACHERID
+		  join teachers on sectionteacher.TEACHERID = teachers.id
+		  join courses on SECTIONS.COURSE_NUMBER = courses.course_number
+		  join schools on sections.schoolid = schools.school_number
+		  where terms.yearid=28;
+        <script connection-id="IXL_Sections">
+			$teachernumber, $schoolid-$course_number-$section_number, $abbreviation $course_name $course_number-$section_number
+		</script>
+	</query>
+</etl>

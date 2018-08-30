@@ -1,0 +1,22 @@
+<!DOCTYPE etl SYSTEM "http://scriptella.javaforge.com/dtd/etl.dtd">
+<etl>
+	<description>Teacher Export for IXL</description>
+	<properties>
+		<!--Loading from external properties file-->
+		<include href="etl.properties"/>
+	</properties>
+	<connection id="POWERSCHOOLDB" driver="$driver1" url="$url1" user="$user1" password="$password1" classpath="$classpath1"/>
+	<connection id="IXL_Teacher" driver="csv" url="$outputcsv16">
+		null_string=
+		eol=\r\n
+	</connection>
+        <script connection-id="IXL_Teacher">
+			School Id,Teacher ID, Last Name, First Name, E-mail, Username
+		</script>
+	<query connection-id="POWERSCHOOLDB">
+      select SchoolID, TeacherNumber,Email_Addr,First_Name,Last_Name from Teachers where Status=1;
+        <script connection-id="IXL_Teacher" if="email_addr!=null and schoolid!=0">
+			$schoolid,$teachernumber,$last_name,$first_name,$email_addr,$email_addr
+		</script>
+	</query>
+</etl>
