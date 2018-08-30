@@ -11,14 +11,14 @@ Public Schools in Virginia.
 
 **Description**
 These scripts export out the school, students, teachers, sections,
-and enrollments PowerSchool that are required for import into IXL.
+and enrollments from PowerSchool that are required for import into IXL.
 
 **Release**
 The latest version is always available on Github from:
   https://github.com/JLester73/ps2ixl
   
 **Requirements**
-These scripts using the Scriptella ETL tool to export the data
+These scripts use the Scriptella ETL tool to export the data
 in a format used by IXL.  Scriptella can be downloaded from
 http://scriptella.org/.  It also uses Java and Oracle.
 
